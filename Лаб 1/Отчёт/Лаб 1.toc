@@ -1,0 +1,10 @@
+\babel@toc {russian}{}
+\contentsline {section}{\numberline {1}Постановка задачи}{4}{section.1}%
+\contentsline {section}{\numberline {2}Теория}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Рассматриваемые распределения}{5}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Гистограмма}{5}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Реализация}{6}{section.3}%
+\contentsline {section}{\numberline {4}Результаты}{7}{section.4}%
+\contentsline {section}{Заключение}{9}{section*.3}%
+\contentsline {section}{Список литературы}{10}{section*.3}%
+\contentsline {section}{Приложение А. Репозиторий с исходным кодом}{11}{section*.5}%
