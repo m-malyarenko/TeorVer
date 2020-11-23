@@ -1,0 +1,340 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                     Отчёт по лабораторной работе №2
+%
+% Дисциплина: Теория вероятностей и Математическая статистика
+%                     
+% Название:   
+%
+% Выполнил:   Михаил Маляренко
+%
+% Дата:       23 Ноя. 2020
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% HEADER BEGIN 
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{pscyr}
+\usepackage[T2A]{fontenc}
+\usepackage{geometry}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\geometry {	
+	a4paper, 
+	left   = 20mm, 
+	right  = 20mm, 
+	top    = 20mm, 
+	bottom = 20mm
+}
+
+\definecolor{urlcolor}{HTML}{2484BC} 
+\definecolor{linkcolor}{HTML}{000000}
+% HEADER END
+
+% DIFINES BEGIN
+\newcommand{\lskip}{\hfill\break}
+% DEFINES END
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+		\hfill \break
+		{\textbf{Санкт-Петербургский политехнический университет Петра Великого}}\\
+		\hfill \break
+		\textbf{Институт прикладной математики и механики}\\
+		 \hfill \break
+		\textbf{Кафедра <<Телематика (при ЦНИИ РТК)>>}\\
+		\vfill
+		\large{\bfseries Отчет по лабораторной работе}\\
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\hfill \break
+		\normalsize{\bfseries Вычисление выборочных характеристик}\\
+		По дисциплине <<Теория вероятностей и Математическая статистика>>\\
+		\hfill \break
+		\hfill \break
+		\hfill \break
+	\end{center}
+ 
+	\normalsize
+	{ 
+		\begin{tabular}{lp{2cm}cr}
+			Выполнил &&&\\
+			Студент гр. 3630201/80101&&\underline{\hspace{1.5cm}}& М.Д. Маляренко\\\\
+			Руководитель&&&\\ 
+			к.ф.-м.н., доцент && \underline{\hspace{1.5cm}}& А.Н. Баженов \\\\
+			&&&<<\underline{\phantom{333}}>>\underline{\phantom{сентября000}}
+			2020г.
+		\end{tabular}
+	}
+\vfill
+
+\begin{center} Санкт-Петербург \\2020 \end{center}
+\end{titlepage}
+
+\newpage
+
+\setcounter{page}{2}
+
+\begin{flushleft}
+
+\setlength{\parindent}{1cm}
+
+\tableofcontents
+
+\newpage
+
+\listoftables
+
+\newpage
+
+\section{Постановка задачи}
+
+	Заданы 5 распределений случайных величин:
+
+	\begin{enumerate}
+		\item Нормальное распределение $N(x, 0, 1)$
+		\item Распределение Коши $C(x, 0, 1)$
+		\item Распределение Лапласа $L(x, 0, 1/\sqrt{2})$
+		\item Дискретное распределение Пуассона $P(k, 10)$
+		\item Равномерное распределение $U(x, -\sqrt{3}, \sqrt{3})$
+	\end{enumerate}
+
+	\noindentДля каждого распределения необходимо сгенерировать выборки размером 10, 100 и 1000 элементов. Для каждой выборки рассчитать числовые характеристики:
+
+	\begin{enumerate}
+		\item Выборочное среднее $\overline{x}$
+		\item Выборочная медиана $med \; x$
+		\item Полусумма экстремальных выборочных элементов $z_R$
+		\item Полусумма квартилей $z_Q$
+		\item Усечённое среднее $z_{tr}$
+	\end{enumerate}
+
+	Произвести генерацию каждой выборки и вычисление характеристик 1000 раз. Найти среднее характеристик $E(z)$, вычислить дисперсию $D(z)$. 
+
+\newpage
+
+\section{Теория}
+
+	\subsection{Вариационный ряд}
+
+		Вариационным рядом называется последовательность не обязательно уникальных элементов выборки, расположенных порядке неубывания. \cite{theory}
+		\lskip
+
+		\noindentЗапись элементов вариационного ряда:
+
+		$$
+		x_{(i)}, \; i = 1, \dots, n
+		$$
+
+	\subsection{Выборочные числовые характеристики}
+
+		В данной лабораторной работе рассматриваются следующие числовые выборочные характеристики для вариационного ряда $x_{(1)}, \dots, x_{(n)}$. \cite{theory}
+
+			\begin{itemize}
+				\item \textit{Выборочное среднее}
+				
+				\begin{equation}
+					\overline{x} = \frac{1}{n} \sum_{i=1}^{n}x_{(i)}
+					\label{mean}
+				\end{equation}
+					
+				\item \textit{Выборочная медиана}
+				
+				\begin{equation}
+					med \; x = 
+					\left\{
+					\begin{aligned}
+						& x_{(l + 1)}, \qquad \quad n = 2l + 1\\
+						& \frac{x_{(l)} + x_{(l + 1)}}{2}, \; n = 2l\\
+					\end{aligned}
+					\right.
+					\label{med}
+				\end{equation}
+
+				\item \textit{Полусумма экстремальных выборочных элементов}
+				
+				\begin{equation}
+					z_R = \frac{x_{(1)} + x_{(n)}}{2}
+					\label{extreme}
+				\end{equation}
+
+				\item \textit{Полусумма квартилей}
+				
+				Выборочная квартиль:
+
+				$$
+				z_p = 
+				\left\{
+				\begin{aligned}
+					& x_{([np] + 1)}, & np\text{ - целое}\\
+					& x_{(np)}, \; & np\text{ - дробное}\\
+				\end{aligned}
+				\right.
+				$$
+		
+				Полусумма квартилей:
+
+				\begin{equation}
+					z_Q = \frac{z_{1/4} + z_{3/4}}{2}
+					\label{quart}
+				\end{equation}
+
+				\item \textit{Усечённое среднее}
+				
+				\begin{equation}
+					z_{tr} = \frac{1}{n - 2r} \sum_{i=r+i}^{n - r}x_{(i)}, \qquad r \approx \frac{n}{4}  
+					\label{trunc}
+				\end{equation}
+
+			\end{itemize}
+
+	\subsection{Средее характеристик, дисперсия}
+		
+		Среднее характеристик рассчитывается как простое среднее арифметическое.
+
+		\begin{equation}
+			E(z) = \overline{z}
+			\label{E}
+		\end{equation}
+
+		Рассеяние или дисперсия рассчитывается как разность среднеквадратичного значения вариационного ряда и квадрата выборочного среднего:
+
+		\begin{equation}
+			D(z) = \overline{x^2} - {\overline{x}}^2
+			\label{D}
+		\end{equation}
+		
+\newpage
+
+\section{Реализация}
+
+Расчёты были реализованы в среде аналитических вычислений Maxima. Выборки сгенерированы встроенными функциями среды Maxima. Код скрипта представлен в репозитории на GitHub.
+
+\newpage
+
+\section{Результаты}
+
+По результатам вычисления выборочных числовых характеристик были сформированы таблицы 1-5 по количеству заданных распределений. Погрешность среднего значения характеристики выборки рассчитывалась как $\Delta_z = \sqrt{D(z)}$.
+
+	\begin{table}[h]
+		\begin{center}
+			\begin{tabular}{|*{7}{c|}} \hline
+				\multicolumn{7}{|c|}{Нормальное распределение}\\ \hline
+				\multicolumn{2}{|c|}{} & $\overline{x} \; (\ref{mean})$ & $med \; x\; (\ref{med})$ & $z_R \; (\ref{extreme})$ & $z_Q\; (\ref{quart})$ & $z_{tr}\; (\ref{trunc})$ \\ \hline
+				\multirow{2}*{$N = 10$}   & $E(z) \; (\ref{E}) \pm \Delta_z$ & $0.0 \pm 0.4$ & $0.0 \pm 0.7$ & $0.0 \pm 0.8$ & $0.0 \pm 0.8$ & $0.0 \pm 0.5$ \\ \cline{2-7}
+										& $D(z) \; (\ref{D})$ & $0.102$ & $0.489$ & $0.509$ & $0.498$ & $0.179$ \\ \hline
+				\multirow{2}*{$N = 100$}  & $E(z) \pm \Delta_z$ & $0.00 \pm 0.09$ & $0.0 \pm 0.7$ & $0.0 \pm 0.8$ & $0.0 \pm 0.7$ & $0.0 \pm 0.2$ \\ \cline{2-7}
+										& $D(z)$ & $0.01$ & $0.494$ & $0.518$ & $0.497$ & $0.020$ \\ \hline
+				\multirow{2}*{$N = 1000$} & $E(z) \pm \Delta_z$ & $0.00 \pm 0.04$ & $0.0 \pm 0.7$ & $0.0 \pm 0.7$ & $0.0 \pm 0.7$ & $0.0 \pm 0.05$ \\ \cline{2-7}
+										& $D(z)$ & $0.001$ & $0.528$ & $0.501$ & $0.520$ & $0.002$\\ \hline  		
+			\end{tabular}
+		\caption{Характеристики выборок нормального распределения}
+		\end{center}
+	\end{table}
+
+	\begin{table}[h]
+		\begin{center}
+			\begin{tabular}{|*{7}{c|}} \hline
+				\multicolumn{7}{|c|}{Распределение Лапласа}\\ \hline
+				\multicolumn{2}{|c|}{} & $\overline{x}$ & $med\; x$ & $z_R$ & $z_Q$ & $z_{tr}$ \\ \hline
+				\multirow{2}*{$N = 10$}   & $E(z) \pm \Delta_z$ & $0.0 \pm 0.3$ & $0.0 \pm 0.5$ & $0.0 \pm 0.4$ & $0.0 \pm 0.4$ & $0.0 \pm 0.1$ \\ \cline{2-7}
+										& $D(z)$ & $0.093$ & $0.512$ & $0.428$ & $0.479$ & $0.116$ \\ \hline
+				\multirow{2}*{$N = 100$}  & $E(z) \pm \Delta_z$ & $0.0 \pm 0.1$ & $0.0 \pm 0.8$ & $0.0 \pm 0.8$ & $0.0 \pm 0.8$ & $0.0 \pm 0.2$ \\ \cline{2-7}
+										& $D(z)$ & $0.01$ & $0.494$ & $0.518$ & $0.497$ & $0.020$ \\ \hline
+				\multirow{2}*{$N = 1000$} & $E(z) \pm \Delta_z$ & $0.00 \pm 0.04$ & $0.0 \pm 0.7$ & $0.0 \pm 0.8$ & $0.0 \pm 0.7$ & $0.00 \pm 0.05$ \\ \cline{2-7}
+										& $D(z)$ & $0.001$ & $0.492$ & $0.521$ & $0.485$ & $0.002$\\ \hline					
+			\end{tabular}
+			\caption{Характеристики выборок распределения Лапласа}
+		\end{center}
+	\end{table}
+	
+	\begin{table}[h]
+		\begin{center}
+			\begin{tabular}{|*{7}{c|}} \hline
+				\multicolumn{7}{|c|}{Распределение Коши}\\ \hline
+				\multicolumn{2}{|c|}{} & $\overline{x}$ & $med\; x$ & $z_R$ & $z_Q$ & $z_{tr}$ \\ \hline
+				\multirow{2}*{$N = 10$}   & $E(z) \pm \Delta_z$ & $0 \pm 16$ & $0 \pm 48$ & $0 \pm 33$ & $0 \pm 13$ & $0 \pm 23$ \\ \cline{2-7}
+										& $D(z)$ & $260$ & $2342$ & $1063$ & $194$ & $558$ \\ \hline
+				\multirow{2}*{$N = 100$}  & $E(z) \pm \Delta_z$ & $0 \pm 12$ & $-1 \pm 22$ & $1\pm 12$ & $-2 \pm 105$ & $1 \pm 23$ \\ \cline{2-7}
+										& $D(z)$ & $142$ & $499$ & $137$ & $11084$ & $492$ \\ \hline
+				\multirow{2}*{$N = 1000$} & $E(z) \pm \Delta_z$ & $0 \pm 16$ & $0 \pm 34$ & $0 \pm 21$ & $2 \pm 64$ & $0 \pm 26$ \\ \cline{2-7}
+										& $D(z)$ & $259$ & $1170$ & $461$ & $4212$ & $694$\\ \hline					
+			\end{tabular}
+			\caption{Характеристики выборок распределения Коши}
+		\end{center}
+	\end{table}
+
+	\newpage
+
+	\begin{table}[h]
+		\begin{center}
+			\begin{tabular}{|*{7}{c|}} \hline
+				\multicolumn{7}{|c|}{Распределение Пуассона}\\ \hline
+				\multicolumn{2}{|c|}{} & $\overline{x}$ & $med\; x$ & $z_R$ & $z_Q$ & $z_{tr}$ \\ \hline
+				\multirow{2}*{$N = 10$}   & $E(z) \pm \Delta_z$ & $10.0 \pm 1.0$ & $9.9 \pm 2.2$ & $9.9 \pm 2.2$ & $10.0 \pm 2.1$ & $10.0 \pm 1.3$ \\ \cline{2-7}
+										& $D(z)$ & $1.028$ & $4.832$ & $5.127$ & $4.685$ & $1.649$ \\ \hline
+				\multirow{2}*{$N = 100$}  & $E(z) \pm \Delta_z$ & $10.0 \pm 0.3$ & $9.9 \pm 2.3$ & $10.0 \pm 2.4$ & $10.0 \pm 2.2$ & $10.0 \pm 0.5$ \\ \cline{2-7}
+										& $D(z)$ & $0.092$ & $5.151$ & $4.989$ & $4.910$ & $0.199$ \\ \hline
+				\multirow{2}*{$N = 1000$} & $E(z) \pm \Delta_z$ & $10.00 \pm 0.09$ & $9.8 \pm 2.3$ & $10.0 \pm 2.2$ & $10.0 \pm 2.2$ & $10.00 \pm 0.15$ \\ \cline{2-7}
+										& $D(z)$ & $0.0098$ & $5.1100$ & $4.8222$ & $4.7592$ & $0.0211$\\ \hline					
+			\end{tabular}
+			\caption{Характеристики выборок распределения Пуассона}
+		\end{center}
+	\end{table}
+
+	\begin{table}[h]
+		\begin{center}
+			\begin{tabular}{|*{7}{c|}} \hline
+				\multicolumn{7}{|c|}{Равномерное распределение}\\ \hline
+				\multicolumn{2}{|c|}{} & $\overline{x}$ & $med\; x$ & $z_R$ & $z_Q$ & $z_{tr}$ \\ \hline
+				\multirow{2}*{$N = 10$}   & $E(z) \pm \Delta_z$ & $0.0 \pm 0.3$ & $0.0 \pm 0.7$ & $0.0 \pm 0.8$ & $0.0 \pm 0.8$ & $0.0 \pm 0.4$ \\ \cline{2-7}
+										& $D(z)$ & $0.091$ & $0.477$ & $0.509$ & $0.506$ & $0.150$ \\ \hline
+				\multirow{2}*{$N = 100$}  & $E(z) \pm \Delta_z$ & $0.0 \pm 0.1$ & $0.0 \pm 0.8$ & $0.0 \pm 0.8$ & $0.0 \pm 0.7$ & $0.0 \pm 0.2$ \\ \cline{2-7}
+										& $D(z)$ & $0.103$ & $0.727$ & $0.713$ & $0.701$ & $0.146$ \\ \hline
+				\multirow{2}*{$N = 1000$} & $E(z) \pm \Delta_z$ & $0.00 \pm 0.04$ & $0.0 \pm 0.7$ & $0.0 \pm 0.7$ & $0.0 \pm 0.7$ & $0.0 \pm 0.05$ \\ \cline{2-7}
+										& $D(z)$ & $0.001$ & $0.500$ & $0.496$ & $0.489$ & $0.002$\\ \hline					
+			\end{tabular}
+			\caption{Характеристики выборок равномерного распределения}
+		\end{center}
+	\end{table}
+
+\newpage
+
+\section*{Заключение}
+\addcontentsline{toc}{section}{Заключение}
+
+В результате лабораторной работы были сгенерированы выборки размером 10, 100, 1000 элементов по заданным распределений и оценены их числовые характеристики. Работа велась в среде аналитических вычислений Maxima.
+
+Из всех рассмотренных распределений самую большую дисперсию (на 3-4 порядка относительно других) имеет распределение Коши в связи с мощными выбросами.
+
+Можно сделать вывод, что для данных распределений, чем больше мощность выборки, тем ближе значение медианы к своему теоретическому значению и значение выборочного среднего ближе к теоретическому матожиданию. 
+
+\newpage
+
+\addcontentsline{toc}{section}{Список литературы}
+
+\begin{thebibliography}{9}
+
+        \bibitem{theory}
+        Теоретическое приложение к лабораторным работам №1-4 по дисциплине «Математическая статистика». -- СПб.: СПбПУ, 2020. -- 12 c 
+	
+\end{thebibliography}
+
+\newpage
+
+\section*{Приложение А. Репозиторий с исходным кодом}
+\addcontentsline{toc}{section}{Приложение А. Репозиторий с исходным кодом}
+
+Исходный код скрипта для среды аналитических вычислений Maxima находится в репозитории GitHub -- URL \url{https://github.com/malyarenko-md/TeorVer}
+
+\end{flushleft}
+
+\end{document}
